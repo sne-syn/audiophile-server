@@ -63,7 +63,7 @@ yarn prisma studio
 
 Then go to
 
-- http://localhost:5555/ (on Chrome only)
+- http://localhost:5555/ (Chrome only)
 
 ## External packages and guides used for this setup
 
