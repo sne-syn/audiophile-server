@@ -26,7 +26,7 @@ model Product {
   description String
   features    String
   galery      Json
-  images      Image?
+  images      Images?
   includes    Includes[]
   others      Others[]
   category    Category  @relation(fields: [categoryId], references: [id])
@@ -35,7 +35,7 @@ model Product {
   updatedAt   DateTime  @updatedAt
 }
 
-model Image {
+model Images {
   id        String  @id @default(uuid())
   mobile    String
   tablet    String
