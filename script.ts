@@ -1,10 +1,8 @@
 import express, { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
-const cors = require("cors");
-
-const prisma = new PrismaClient();
-const app = express();
-//app.use(cors());
+import prisma from "./lib/prisma";
+import app from "./lib/app";
+import cors from "cors";
+app.use(cors());
 
 // GET CATEGORIES LIST
 app.get("/category", async (req: Request, res: Response) => {
