@@ -1,6 +1,6 @@
 import express from "express";
 const app = express();
-const category = require("./api/category");
+import category from "./api/category";
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
@@ -10,4 +10,4 @@ app.listen(PORT, () => {
 app.use("/api/category", category);
 app.use("/assets", express.static("assets"));
 
-module.exports = app;
+export default app;
