@@ -1,7 +1,10 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+const cors = require("cors");
+
 const prisma = new PrismaClient();
 const app = express();
+//app.use(cors());
 
 // GET CATEGORIES LIST
 app.get("/category", async (req: Request, res: Response) => {
@@ -10,8 +13,43 @@ app.get("/category", async (req: Request, res: Response) => {
   res.json({ categories });
 });
 
+// GET IMAGE LIST
+app.get("/image", cors(), async (req: Request, res: Response) => {
+  const images = await prisma.image.findMany();
+
+  res.json({ images });
+});
+
+// GET INCLUDE LIST
+app.get("/include", cors(), async (req: Request, res: Response) => {
+  const includes = await prisma.include.findMany();
+
+  res.json({ includes });
+});
+
+// GET OTHER LIST
+app.get("/other", cors(), async (req: Request, res: Response) => {
+  const others = await prisma.other.findMany();
+
+  res.json({ others });
+});
+
+// GET CALLERY LIST
+app.get("/gallery", cors(), async (req: Request, res: Response) => {
+  const galleries = await prisma.gallery.findMany();
+
+  res.json({ galleries });
+});
+
+// GET PRODUCTS LIST
+app.get("/product", cors(), async (req: Request, res: Response) => {
+  const products = await prisma.product.findMany();
+
+  res.json({ products });
+});
+
 // GET PRODUCTS LIST BY CATEGORY
-app.get("/category/:name", async (req: Request, res: Response) => {
+app.get("/category/:name", cors(), async (req: Request, res: Response) => {
   const category = await prisma.category.findFirst({
     where: {
       name: req.params.name,
@@ -24,16 +62,8 @@ app.get("/category/:name", async (req: Request, res: Response) => {
   res.json({ category });
 });
 
-// GET ALL PRODUCTS
-app.get("/products", async (req: Request, res: Response) => {
-  const products = await prisma.product.findMany();
-  const count = products.length;
-
-  res.json({ products, count });
-});
-
 // GET PRODUCT BY ID
-app.get("/products/:id", async (req: Request, res: Response) => {
+app.get("/products/:id", cors(), async (req: Request, res: Response) => {
   const product = await prisma.product.findUnique({
     where: {
       id: req.params.id,
@@ -41,7 +71,7 @@ app.get("/products/:id", async (req: Request, res: Response) => {
     include: {
       category: true,
       others: true,
-      images: true,
+      image: true,
       includes: true,
     },
   });
@@ -50,3 +80,4 @@ app.get("/products/:id", async (req: Request, res: Response) => {
 });
 
 app.listen(3001);
+app.use("/assets", express.static("assets"));

@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,50 +8,73 @@ datasource db {
 }
 
 model Category {
-  id       String    @id @default(uuid())
-  name     String
-  image    String
-  products Product[]
+  id        String    @id @default(uuid())
+  name      String
+  image     String
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Product {
-  id          String     @id @default(uuid())
-  slug        String
-  name        String
-  new         Boolean    @default(true)
-  price       Int
-  description String
-  features    String
-  galery      Json
-  images      Images?
-  includes    Includes[]
-  others      Others[]
-  category    Category  @relation(fields: [categoryId], references: [id])
-  categoryId  String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime  @updatedAt
+  id           String    @id @default(uuid())
+  slug         String
+  name         String
+  new          Boolean   @default(true)
+  price        Int
+  description  String
+  features     String
+  previewImage String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  category     Category  @relation(fields: [categoryId], references: [id])
+  categoryId   String
+  includes     Include[]
+  others       Other[]
+  gallery      Gallery[]
+  image        Image?
 }
 
-model Images {
-  id        String  @id @default(uuid())
+model Image {
+  id        String   @id @default(uuid())
   mobile    String
   tablet    String
   desktop   String
-  product   Product @relation(fields: [productId], references: [id])
-  productId String  @unique
+  otherId   String?  @unique
+  productId String?  @unique
+  galleryId String?  @unique
+  other     Other?   @relation(fields: [otherId], references: [id])
+  product   Product? @relation(fields: [productId], references: [id])
+  gallery   Gallery? @relation(fields: [galleryId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Includes {
-  id       String    @id @default(uuid())
-  quantity Int
-  item     String
-  product  Product[]
+model Include {
+  id        String    @id @default(uuid())
+  quantity  Int
+  item      String
+  product   Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
-model Others {
-  id      String    @id @default(uuid())
-  slug    String
-  name    String
-  images  Json
-  product Product[]
+model Other {
+  id        String    @id @default(uuid())
+  slug      String
+  name      String
+  image     Image?
+  product   Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Gallery {
+  id        String   @id @default(uuid())
+  position  Int
+  image     Image?
+  productId String   @unique
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
