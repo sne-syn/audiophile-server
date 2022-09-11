@@ -1,4 +1,15 @@
 {
-  "regions": ["cdg1"],
-  "public": false
+  "version": 2,
+  "builds": [
+    {
+      "src": "script.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "script.ts"
+    }
+  ]
 }

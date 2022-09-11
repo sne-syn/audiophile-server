@@ -77,5 +77,9 @@ app.get("/products/:id", cors(), async (req: Request, res: Response) => {
   res.json({ product });
 });
 
-app.listen(3001);
+app.listen(5000, ()=> {
+  console.log("Running on port 5000")
+});
 app.use("/assets", express.static("assets"));
+
+module.exports = app;

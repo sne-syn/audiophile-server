@@ -1,53 +1,30 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE "Category" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "image" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
-  - You are about to drop the column `galery` on the `Product` table. All the data in the column will be lost.
-  - You are about to drop the `Images` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Includes` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Others` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `_IncludesToProduct` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `_OthersToProduct` table. If the table is not empty, all the data it contains will be lost.
-  - Added the required column `updatedAt` to the `Category` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `previewImage` to the `Product` table without a default value. This is not possible if the table is not empty.
+    CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
+);
 
-*/
--- DropForeignKey
-ALTER TABLE "Images" DROP CONSTRAINT "Images_productId_fkey";
+-- CreateTable
+CREATE TABLE "Product" (
+    "id" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "new" BOOLEAN NOT NULL DEFAULT true,
+    "price" INTEGER NOT NULL,
+    "description" TEXT NOT NULL,
+    "features" TEXT NOT NULL,
+    "previewImage" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "categoryId" TEXT NOT NULL,
 
--- DropForeignKey
-ALTER TABLE "_IncludesToProduct" DROP CONSTRAINT "_IncludesToProduct_A_fkey";
-
--- DropForeignKey
-ALTER TABLE "_IncludesToProduct" DROP CONSTRAINT "_IncludesToProduct_B_fkey";
-
--- DropForeignKey
-ALTER TABLE "_OthersToProduct" DROP CONSTRAINT "_OthersToProduct_A_fkey";
-
--- DropForeignKey
-ALTER TABLE "_OthersToProduct" DROP CONSTRAINT "_OthersToProduct_B_fkey";
-
--- AlterTable
-ALTER TABLE "Category" ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-ADD COLUMN     "updatedAt" TIMESTAMP(3) NOT NULL;
-
--- AlterTable
-ALTER TABLE "Product" DROP COLUMN "galery",
-ADD COLUMN     "previewImage" TEXT NOT NULL;
-
--- DropTable
-DROP TABLE "Images";
-
--- DropTable
-DROP TABLE "Includes";
-
--- DropTable
-DROP TABLE "Others";
-
--- DropTable
-DROP TABLE "_IncludesToProduct";
-
--- DropTable
-DROP TABLE "_OthersToProduct";
+    CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Image" (
@@ -57,6 +34,7 @@ CREATE TABLE "Image" (
     "desktop" TEXT NOT NULL,
     "otherId" TEXT,
     "productId" TEXT,
+    "galleryId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -86,14 +64,14 @@ CREATE TABLE "Other" (
 );
 
 -- CreateTable
-CREATE TABLE "Galery" (
+CREATE TABLE "Gallery" (
     "id" TEXT NOT NULL,
-    "galery" JSONB NOT NULL,
+    "position" INTEGER NOT NULL,
     "productId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Galery_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Gallery_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -115,7 +93,10 @@ CREATE UNIQUE INDEX "Image_otherId_key" ON "Image"("otherId");
 CREATE UNIQUE INDEX "Image_productId_key" ON "Image"("productId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Galery_productId_key" ON "Galery"("productId");
+CREATE UNIQUE INDEX "Image_galleryId_key" ON "Image"("galleryId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Gallery_productId_key" ON "Gallery"("productId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_IncludeToProduct_AB_unique" ON "_IncludeToProduct"("A", "B");
@@ -130,13 +111,19 @@ CREATE UNIQUE INDEX "_OtherToProduct_AB_unique" ON "_OtherToProduct"("A", "B");
 CREATE INDEX "_OtherToProduct_B_index" ON "_OtherToProduct"("B");
 
 -- AddForeignKey
+ALTER TABLE "Product" ADD CONSTRAINT "Product_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Image" ADD CONSTRAINT "Image_otherId_fkey" FOREIGN KEY ("otherId") REFERENCES "Other"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Image" ADD CONSTRAINT "Image_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Galery" ADD CONSTRAINT "Galery_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Image" ADD CONSTRAINT "Image_galleryId_fkey" FOREIGN KEY ("galleryId") REFERENCES "Gallery"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Gallery" ADD CONSTRAINT "Gallery_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_IncludeToProduct" ADD CONSTRAINT "_IncludeToProduct_A_fkey" FOREIGN KEY ("A") REFERENCES "Include"("id") ON DELETE CASCADE ON UPDATE CASCADE;
