@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
-    "devStart": "nodemon script.ts",
+    "dev": "ts-node script.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
