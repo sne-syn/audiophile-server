@@ -1,13 +1,13 @@
 import prisma from "../lib/prisma";
+import corsWithParams from "../lib/cors";
 const express = require("express");
 const router = express.Router();
-import corsWithParams from "../lib/cors";
 
 router.get("/", corsWithParams(), async (req: any, res: any) => {
   try {
-    const products = await prisma.product.findMany();
+    const images = await prisma.image.findMany();
 
-    res.json({ products });
+    res.json({ images });
   } catch (error) {
     console.error(error);
   }
@@ -15,19 +15,13 @@ router.get("/", corsWithParams(), async (req: any, res: any) => {
 
 router.get("/:id", corsWithParams(), async (req: any, res: any) => {
   try {
-    const product = await prisma.product.findUnique({
+    const image = await prisma.image.findUnique({
       where: {
         id: req.params.id,
       },
-      include: {
-        category: true,
-        others: true,
-        image: true,
-        includes: true,
-      },
     });
 
-    res.json({ product });
+    res.json({ image });
   } catch (error) {
     console.error(error);
   }

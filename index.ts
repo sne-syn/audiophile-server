@@ -1,10 +1,12 @@
 const express = require("express");
 const app = express();
 const category = require("./api/category");
+const image = require("./api/image");
 const product = require("./api/product");
 
 app.use(express.json({ extended: false }));
 app.use("/api/category", category);
+app.use("/api/image", image);
 app.use("/api/product", product);
 app.use("/assets", express.static("assets"));
 

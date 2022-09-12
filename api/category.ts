@@ -1,13 +1,9 @@
 import prisma from "../lib/prisma";
+import corsWithParams from "../lib/cors";
 const express = require("express");
 const router = express.Router();
-const cors = require("cors");
 
-const corsParams = {
-  origin: "http://localhost:3000",
-};
-
-router.get("/", cors(corsParams), async (req: any, res: any) => {
+router.get("/", corsWithParams(), async (req: any, res: any) => {
   try {
     const categories = await prisma.category.findMany();
 
@@ -17,7 +13,7 @@ router.get("/", cors(corsParams), async (req: any, res: any) => {
   }
 });
 
-router.get("/:name", cors(corsParams), async (req: any, res: any) => {
+router.get("/:name", corsWithParams(), async (req: any, res: any) => {
   const category = await prisma.category.findFirst({
     where: {
       name: req.params.name,
@@ -31,7 +27,7 @@ router.get("/:name", cors(corsParams), async (req: any, res: any) => {
 
 router.get(
   "/:name/:productId",
-  cors(corsParams),
+  corsWithParams(),
   async (req: any, res: any) => {
     const product = await prisma.product.findUnique({
       where: {
