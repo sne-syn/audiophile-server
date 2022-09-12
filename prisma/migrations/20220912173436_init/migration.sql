@@ -2,7 +2,6 @@
 CREATE TABLE "Category" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "image" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -35,6 +34,7 @@ CREATE TABLE "Image" (
     "otherId" TEXT,
     "productId" TEXT,
     "galleryId" TEXT,
+    "categoryId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -96,7 +96,7 @@ CREATE UNIQUE INDEX "Image_productId_key" ON "Image"("productId");
 CREATE UNIQUE INDEX "Image_galleryId_key" ON "Image"("galleryId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Gallery_productId_key" ON "Gallery"("productId");
+CREATE UNIQUE INDEX "Image_categoryId_key" ON "Image"("categoryId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_IncludeToProduct_AB_unique" ON "_IncludeToProduct"("A", "B");
@@ -121,6 +121,9 @@ ALTER TABLE "Image" ADD CONSTRAINT "Image_productId_fkey" FOREIGN KEY ("productI
 
 -- AddForeignKey
 ALTER TABLE "Image" ADD CONSTRAINT "Image_galleryId_fkey" FOREIGN KEY ("galleryId") REFERENCES "Gallery"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Image" ADD CONSTRAINT "Image_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Gallery" ADD CONSTRAINT "Gallery_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

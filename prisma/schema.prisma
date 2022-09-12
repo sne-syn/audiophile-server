@@ -10,7 +10,7 @@ datasource db {
 model Category {
   id        String    @id @default(uuid())
   name      String
-  image     String
+  image     Image?
   products  Product[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -36,18 +36,20 @@ model Product {
 }
 
 model Image {
-  id        String   @id @default(uuid())
-  mobile    String
-  tablet    String
-  desktop   String
-  otherId   String?  @unique
-  productId String?  @unique
-  galleryId String?  @unique
-  other     Other?   @relation(fields: [otherId], references: [id])
-  product   Product? @relation(fields: [productId], references: [id])
-  gallery   Gallery? @relation(fields: [galleryId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String    @id @default(uuid())
+  mobile     String
+  tablet     String
+  desktop    String
+  otherId    String?   @unique
+  productId  String?   @unique
+  galleryId  String?   @unique
+  categoryId String?   @unique
+  other      Other?    @relation(fields: [otherId], references: [id])
+  product    Product?  @relation(fields: [productId], references: [id])
+  gallery    Gallery?  @relation(fields: [galleryId], references: [id])
+  category   Category? @relation(fields: [categoryId], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 }
 
 model Include {
@@ -73,7 +75,7 @@ model Gallery {
   id        String   @id @default(uuid())
   position  Int
   image     Image?
-  productId String   @unique
+  productId String
   product   Product  @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
