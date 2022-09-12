@@ -3,7 +3,11 @@ const express = require("express");
 const router = express.Router();
 const cors = require("cors");
 
-router.get("/", cors(), async (req: any, res: any) => {
+const corsParams = {
+  origin: "http://localhost:3000",
+};
+
+router.get("/", cors(corsParams), async (req: any, res: any) => {
   try {
     const products = await prisma.product.findMany();
 
@@ -13,7 +17,7 @@ router.get("/", cors(), async (req: any, res: any) => {
   }
 });
 
-router.get("/:id", cors(), async (req: any, res: any) => {
+router.get("/:id", cors(corsParams), async (req: any, res: any) => {
   try {
     const product = await prisma.product.findUnique({
       where: {

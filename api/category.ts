@@ -3,7 +3,11 @@ const express = require("express");
 const router = express.Router();
 const cors = require("cors");
 
-router.get("/", cors(), async (req: any, res: any) => {
+const corsParams = {
+  origin: "http://localhost:3000",
+};
+
+router.get("/", cors(corsParams), async (req: any, res: any) => {
   try {
     const categories = await prisma.category.findMany();
 
@@ -13,7 +17,7 @@ router.get("/", cors(), async (req: any, res: any) => {
   }
 });
 
-router.get("/:name", cors(), async (req: any, res: any) => {
+router.get("/:name", cors(corsParams), async (req: any, res: any) => {
   const category = await prisma.category.findFirst({
     where: {
       name: req.params.name,
@@ -25,19 +29,23 @@ router.get("/:name", cors(), async (req: any, res: any) => {
   res.json({ category });
 });
 
-router.get("/:name/:productId", cors(), async (req: any, res: any) => {
-  const product = await prisma.product.findUnique({
-    where: {
-      id: req.params.productId,
-    },
-    include: {
-      category: true,
-      others: true,
-      image: true,
-      includes: true,
-    },
-  });
-  res.json({ product });
-});
+router.get(
+  "/:name/:productId",
+  cors(corsParams),
+  async (req: any, res: any) => {
+    const product = await prisma.product.findUnique({
+      where: {
+        id: req.params.productId,
+      },
+      include: {
+        category: true,
+        others: true,
+        image: true,
+        includes: true,
+      },
+    });
+    res.json({ product });
+  }
+);
 
 module.exports = router;
