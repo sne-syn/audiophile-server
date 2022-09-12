@@ -28,7 +28,7 @@ router.get("/:name", cors(), async (req: any, res: any) => {
 router.get("/:name/:productId", cors(), async (req: any, res: any) => {
   const product = await prisma.product.findUnique({
     where: {
-      id: req.params.id,
+      id: req.params.productId,
     },
     include: {
       category: true,
