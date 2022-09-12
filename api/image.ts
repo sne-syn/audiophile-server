@@ -1,9 +1,13 @@
 import prisma from "../lib/prisma";
-import corsWithParams from "../lib/cors";
 const express = require("express");
 const router = express.Router();
+const cors = require("cors");
 
-router.get("/", corsWithParams(), async (req: any, res: any) => {
+const params = {
+  origin: "http://localhost:3000",
+};
+
+router.get("/", cors(params), async (req: any, res: any) => {
   try {
     const images = await prisma.image.findMany();
 
@@ -13,7 +17,7 @@ router.get("/", corsWithParams(), async (req: any, res: any) => {
   }
 });
 
-router.get("/:id", corsWithParams(), async (req: any, res: any) => {
+router.get("/:id", cors(params), async (req: any, res: any) => {
   try {
     const image = await prisma.image.findUnique({
       where: {
