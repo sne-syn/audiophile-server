@@ -25,4 +25,20 @@ router.get("/:name", cors(), async (req: any, res: any) => {
   res.json({ category });
 });
 
+router.get("/:name/:productId", cors(), async (req: any, res: any) => {
+  const category = await prisma.category.findFirst({
+    where: {
+      name: req.params.name,
+    },
+    include: {
+      products: {
+        where: {
+          id: req.params.productId,
+        },
+      },
+    },
+  });
+  res.json({ category });
+});
+
 module.exports = router;
