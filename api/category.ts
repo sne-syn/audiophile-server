@@ -1,10 +1,7 @@
 import prisma from "../lib/prisma";
 const express = require("express");
 const router = express.Router();
-const Request = express.Request;
-const Response = express.Response;
 const cors = require("cors");
-const app = express();
 
 router.get("/", cors(), async (req: any, res: any) => {
   try {
