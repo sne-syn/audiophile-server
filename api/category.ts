@@ -13,4 +13,16 @@ router.get("/", cors(), async (req: any, res: any) => {
   }
 });
 
+router.get("/:name", cors(), async (req: any, res: any) => {
+  const category = await prisma.category.findFirst({
+    where: {
+      name: req.params.name,
+    },
+    include: {
+      products: true,
+    },
+  });
+  res.json({ category });
+});
+
 module.exports = router;
