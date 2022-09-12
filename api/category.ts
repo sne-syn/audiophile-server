@@ -1,9 +1,12 @@
 import prisma from "../lib/prisma";
-import express, { Response, Request } from "express";
+const express = require("express");
+const router = express.Router();
+const Request = express.Request;
+const Response = express.Response;
+const cors = require("cors");
 const app = express();
-import cors from "cors";
 
-app.get("/", cors(), async (req: Request, res: Response) => {
+router.get("/", cors(), async (req: any, res: any) => {
   try {
     const categories = await prisma.category.findMany();
 
@@ -13,4 +16,4 @@ app.get("/", cors(), async (req: Request, res: Response) => {
   }
 });
 
-export default app;
+module.exports = router;

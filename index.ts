@@ -1,13 +1,15 @@
-import express from "express";
+const express = require("express");
 const app = express();
-import category from "./api/category";
+const category = require("./api/category");
+
+app.use(express.json({ extended: false }));
+app.use("/api/category", category);
+app.use("/assets", express.static("assets"));
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Running on port ${PORT}`);
 });
-
-app.use("/api/category", category);
-app.use("/assets", express.static("assets"));
 
 export default app;
