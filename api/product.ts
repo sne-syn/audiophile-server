@@ -9,7 +9,9 @@ const params = {
 
 router.get("/", cors(params), async (req: any, res: any) => {
   try {
-    const products = await prisma.product.findMany();
+    const products = await prisma.product.findMany({
+      include: { image: true },
+    });
 
     res.json({ products });
   } catch (error) {
@@ -24,8 +26,11 @@ router.get("/:id", cors(params), async (req: any, res: any) => {
         id: req.params.id,
       },
       include: {
-        category: true,
-        others: true,
+        others: {
+          include: {
+            image: true,
+          },
+        },
         image: true,
         includes: true,
       },
