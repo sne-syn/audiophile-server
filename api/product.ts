@@ -24,16 +24,10 @@ router.get("/:id", cors(params), async (req: any, res: any) => {
         id: req.params.id,
       },
       include: {
-        category: {
-          include: image,
-        },
-        others: {
-          include: image,
-        },
+        category: true,
+        others: true,
         image: true,
-        includes: {
-          include: image,
-        },
+        includes: true,
       },
     });
 
