@@ -25,6 +25,7 @@ router.get("/:name", cors(params), async (req: any, res: any) => {
       name: req.params.name,
     },
     include: {
+      image: true,
       products: {
         include: {
           image: true,
