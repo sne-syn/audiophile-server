@@ -35,10 +35,16 @@ router.get("/:name/:productId", cors(params), async (req: any, res: any) => {
       id: req.params.productId,
     },
     include: {
-      category: true,
-      others: true,
+      category: {
+        include: image,
+      },
+      others: {
+        include: image,
+      },
       image: true,
-      includes: true,
+      includes: {
+        include: image,
+      },
     },
   });
   res.json({ product });
