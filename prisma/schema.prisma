@@ -17,22 +17,39 @@ model Category {
 }
 
 model Product {
-  id           String    @id @default(uuid())
-  slug         String
-  name         String
-  new          Boolean   @default(true)
-  price        Int
-  description  String
-  features     String
-  previewImage String
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  category     Category  @relation(fields: [categoryId], references: [id])
-  categoryId   String
-  includes     Include[]
-  others       Other[]
-  gallery      Gallery[]
-  image        Image?
+  id            String    @id @default(uuid())
+  slug          String
+  name          String
+  new           Boolean   @default(true)
+  price         Int
+  description   String
+  features      String
+  previewImage  String
+  featuredImage Featured?
+  heroImage     Hero?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  category      Category  @relation(fields: [categoryId], references: [id])
+  categoryId    String
+  includes      Include[]
+  others        Other[]
+  gallery       Gallery[]
+  image         Image?
+}
+
+model Hero {
+  id        String   @id @default(uuid())
+  image     Image?
+  theme     String
+  productId String?  @unique
+  product   Product? @relation(fields: [productId], references: [id])
+}
+
+model Featured {
+  id        String   @id @default(uuid())
+  image     Image?
+  productId String?  @unique
+  product   Product? @relation(fields: [productId], references: [id])
 }
 
 model Image {
@@ -44,39 +61,35 @@ model Image {
   productId  String?   @unique
   galleryId  String?   @unique
   categoryId String?   @unique
+  heroId     String?   @unique
+  featuredId String?   @unique
   other      Other?    @relation(fields: [otherId], references: [id])
   product    Product?  @relation(fields: [productId], references: [id])
   gallery    Gallery?  @relation(fields: [galleryId], references: [id])
   category   Category? @relation(fields: [categoryId], references: [id])
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  hero       Hero?     @relation(fields: [heroId], references: [id])
+  featured   Featured? @relation(fields: [featuredId], references: [id])
 }
 
 model Include {
-  id        String    @id @default(uuid())
-  quantity  Int
-  item      String
-  product   Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id       String    @id @default(uuid())
+  quantity Int
+  item     String
+  product  Product[]
 }
 
 model Other {
-  id        String    @id @default(uuid())
-  slug      String
-  name      String
-  image     Image?
-  product   Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id      String    @id @default(uuid())
+  slug    String
+  name    String
+  image   Image?
+  product Product[]
 }
 
 model Gallery {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   position  Int
   image     Image?
   productId String
-  product   Product  @relation(fields: [productId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  product   Product @relation(fields: [productId], references: [id])
 }
