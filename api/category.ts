@@ -28,8 +28,16 @@ router.get("/:name", cors(params), async (req: any, res: any) => {
       products: {
         include: {
           image: true,
-          featuredImage: true,
-          heroImage: true,
+          featuredImage: {
+            include: {
+              image: true,
+            },
+          },
+          heroImage: {
+            include: {
+              image: true,
+            },
+          },
         },
       },
     },
