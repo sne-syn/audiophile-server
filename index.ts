@@ -6,13 +6,7 @@ const product = require("./api/product");
 const cors = require("cors");
 
 const corsParams = {
-  origin: [
-    "http://localhost:3000",
-    "https://*audiophile*.*.*",
-    "https://*.vercel.app/",
-    "*",
-    "https://audiophile-ui.vercel.app/",
-  ],
+  origin: "*",
   optionsSuccessStatus: 200,
 };
 
