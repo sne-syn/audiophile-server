@@ -13,6 +13,7 @@ const corsParams = {
     "*",
     "https://audiophile-ui.vercel.app/",
   ],
+  optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsParams));
