@@ -3,7 +3,19 @@ const app = express();
 const category = require("./api/category");
 const image = require("./api/image");
 const product = require("./api/product");
+const cors = require("cors");
 
+const corsParams = {
+  origin: [
+    "http://localhost:3000",
+    "https://*audiophile*.*.*",
+    "https://*.vercel.app/",
+    "*",
+    "https://audiophile-ui.vercel.app/",
+  ],
+};
+
+app.use(cors(corsParams));
 app.use(express.json({ extended: false }));
 app.use("/api/category", category);
 app.use("/api/image", image);
