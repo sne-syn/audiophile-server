@@ -9,18 +9,18 @@ const params = {
 
 router.get("/", cors(params), async (req: any, res: any) => {
   try {
-    const data = await prisma.category.findMany({
+    const payload = await prisma.category.findMany({
       include: { image: true },
     });
 
-    res.json({ data });
+    res.json({ payload });
   } catch (error) {
     console.error(error);
   }
 });
 
 router.get("/:name", cors(params), async (req: any, res: any) => {
-  const data = await prisma.category.findFirst({
+  const payload = await prisma.category.findFirst({
     where: {
       name: req.params.name,
     },
@@ -42,7 +42,7 @@ router.get("/:name", cors(params), async (req: any, res: any) => {
       },
     },
   });
-  res.json({ data });
+  res.json({ payload });
 });
 
 router.get("/:name/:productId", cors(params), async (req: any, res: any) => {
